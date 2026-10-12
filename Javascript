@@ -1,0 +1,564 @@
+
+import { useState } from "react";
+import {
+  Menu,
+  X,
+  Github,
+  Mail,
+  ArrowUpRight,
+  Code2,
+  Palette,
+  Camera,
+  Send,
+} from "lucide-react";
+
+const projects = [
+  {
+    title: "Personal E-Portfolio",
+    category: "Web Development",
+    description:
+      "A personal website showcasing my background, skills, interests, and accomplishments using a clean and responsive design.",
+    image:
+      "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=900&q=80",
+    technologies: ["ReactJS", "Tailwind CSS"],
+  },
+  {
+    title: "Creative Photo Editing",
+    category: "Creative Work",
+    description:
+      "A collection of photo enhancements, creative compositions, and visual edits made to improve my editing and design skills.",
+    image:
+      "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?auto=format&fit=crop&w=900&q=80",
+    technologies: ["Photo Editing", "Visual Design"],
+  },
+  {
+    title: "UI/UX Wireframe",
+    category: "Interface Design",
+    description:
+      "A sample interface design focused on clear navigation, organized layouts, accessibility, and a user-friendly experience.",
+    image:
+      "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&w=900&q=80",
+    technologies: ["UI/UX", "Wireframing"],
+  },
+];
+
+const skills = [
+  "HTML & CSS",
+  "JavaScript",
+  "ReactJS",
+  "Tailwind CSS",
+  "MySQL",
+  "UI/UX Design",
+  "Photo Editing",
+  "Technical Writing",
+];
+
+export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [activeProject, setActiveProject] = useState(null);
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [feedback, setFeedback] = useState("");
+
+  const navLinks = [
+    { name: "Home", href: "#home" },
+    { name: "About Me", href: "#about" },
+    { name: "Projects", href: "#projects" },
+    { name: "Contact", href: "#contact" },
+  ];
+
+  function handleChange(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setFeedback("");
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (
+      !form.name.trim() ||
+      !form.email.trim() ||
+      !form.message.trim()
+    ) {
+      setFeedback("Please fill in all the fields.");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setFeedback("Please enter a valid email address.");
+      return;
+    }
+
+    const subject = encodeURIComponent(
+      `Portfolio inquiry from ${form.name}`
+    );
+
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+    );
+
+    setFeedback("Opening your email application...");
+
+    window.location.href =
+      `mailto:your.email@example.com?subject=${subject}&body=${body}`;
+  }
+
+  return (
+    <div className="min-h-screen bg-dark text-slate-200">
+      {/* NAVIGATION */}
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-dark/90 backdrop-blur-lg">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+          <a
+            href="#home"
+            className="text-2xl font-black tracking-tight text-white"
+          >
+            my<span className="text-accent">portfolio.</span>
+          </a>
+
+          <div className="hidden items-center gap-8 md:flex">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-sm text-slate-400 transition hover:text-accent"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="rounded-lg border border-white/10 p-2 md:hidden"
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </nav>
+
+        {menuOpen && (
+          <div className="border-t border-white/10 px-6 py-3 md:hidden">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="block rounded-lg px-3 py-3 text-slate-300 hover:bg-white/5 hover:text-accent"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <main>
+        {/* HOME */}
+        <section
+          id="home"
+          className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-24 md:grid-cols-2 md:py-32"
+        >
+          <div>
+            <p className="mb-5 text-sm font-bold uppercase tracking-[0.3em] text-accent">
+              Welcome to my portfolio
+            </p>
+
+            <h1 className="text-5xl font-black leading-tight text-white md:text-7xl">
+              Hello, I'm
+              <span className="block text-accent">Your Name.</span>
+            </h1>
+
+            <h2 className="mt-5 text-xl font-medium text-slate-300">
+              IT Student | Aspiring Developer | Creative Enthusiast
+            </h2>
+
+            <p className="mt-6 max-w-xl leading-8 text-slate-400">
+              Welcome to my personal space on the internet! I'm an
+              Information Technology student passionate about technology,
+              creative projects, web development, and learning new things.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a
+                href="#projects"
+                className="rounded-xl bg-accent px-6 py-3 font-bold text-dark transition hover:-translate-y-1 hover:bg-violet-300"
+              >
+                Explore My Work <ArrowUpRight className="ml-1 inline" size={18} />
+              </a>
+
+              <a
+                href="#contact"
+                className="rounded-xl border border-white/15 px-6 py-3 font-semibold transition hover:border-accent hover:text-accent"
+              >
+                Contact Me
+              </a>
+            </div>
+
+            <div className="mt-10 flex gap-5">
+              <a
+                href="https://github.com/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="GitHub"
+                className="text-slate-400 transition hover:text-accent"
+              >
+                <Github size={23} />
+              </a>
+
+              <a
+                href="mailto:your.email@example.com"
+                aria-label="Email"
+                className="text-slate-400 transition hover:text-accent"
+              >
+                <Mail size={23} />
+              </a>
+            </div>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-sm">
+            <div className="absolute -inset-4 rotate-6 rounded-3xl border border-accent/30" />
+
+            <div className="relative rounded-3xl border border-white/10 bg-slate-900 p-5 shadow-2xl">
+              <img
+                src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=85"
+                alt="Personal portrait placeholder"
+                className="h-80 w-full rounded-2xl object-cover"
+              />
+
+              <div className="mt-5">
+                <p className="text-xs uppercase tracking-widest text-accent">
+                  A little about me
+                </p>
+
+                <h3 className="mt-2 text-2xl font-bold text-white">
+                  Learning. Creating. Growing.
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-slate-400">
+                  Turning ideas into meaningful projects, one step at a time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ABOUT ME */}
+        <section
+          id="about"
+          className="scroll-mt-20 border-y border-white/5 bg-slate-900/50 px-6 py-24"
+        >
+          <div className="mx-auto max-w-6xl">
+            <SectionHeading
+              eyebrow="Get to know me"
+              title="About Me"
+              description="I am Abigail Roxas. A 3rd year BSIT Student from Cavite State University- Tanza Campus. "
+            />
+
+            <div className="grid gap-12 md:grid-cols-2">
+              <div>
+                <h3 className="text-2xl font-bold text-white">
+                  My Background
+                </h3>
+
+                <p className="mt-5 leading-8 text-slate-400">
+                  I am an Information Technology student who enjoys
+                  exploring the world of programming, web development,
+                  and digital creativity. Through school activities and
+                  personal projects, I continue to develop my technical
+                  skills and discover new ways to solve problems.
+                </p>
+
+                <p className="mt-4 leading-8 text-slate-400">
+                  Outside programming, I enjoy creative editing, writing,
+                  visual design, and exploring different ideas. I believe
+                  that creativity and technology work well together to
+                  create meaningful experiences.
+                </p>
+              </div>
+
+              <div className="space-y-5">
+                <div className="rounded-2xl border border-white/10 bg-dark p-6 transition hover:border-accent/40">
+                  <Code2 size={28} className="text-accent" />
+
+                  <h3 className="mt-4 text-xl font-bold text-white">
+                    Technical Skills
+                  </h3>
+
+                  <p className="mt-2 leading-7 text-slate-400">
+                    Programming, frontend development, database
+                    management, and website design.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-dark p-6 transition hover:border-accent/40">
+                  <Palette size={28} className="text-accent" />
+
+                  <h3 className="mt-4 text-xl font-bold text-white">
+                    Creative Interests
+                  </h3>
+
+                  <p className="mt-2 leading-7 text-slate-400">
+                    Photo editing, graphic design, writing, and
+                    creating visual content.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-dark p-6 transition hover:border-accent/40">
+                  <Camera size={28} className="text-accent" />
+
+                  <h3 className="mt-4 text-xl font-bold text-white">
+                    Hobbies
+                  </h3>
+
+                  <p className="mt-2 leading-7 text-slate-400">
+                    Photography, creative projects, exploring technology,
+                    and discovering new interests.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-12">
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <h3 className="text-2xl font-bold text-white">
+                  Skills & Tools
+                </h3>
+
+                <button
+                  onClick={() => setShowAll(!showAll)}
+                  className="text-sm font-semibold text-accent transition hover:text-white"
+                >
+                  {showAll ? "Show Less −" : "View All +"}
+                </button>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {(showAll ? skills : skills.slice(0, 4)).map((skill) => (
+                  <span
+                    key={skill}
+                    className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-sm text-violet-200 transition hover:bg-accent/20"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* PROJECTS */}
+        <section
+          id="projects"
+          className="scroll-mt-20 px-6 py-24"
+        >
+          <div className="mx-auto max-w-6xl">
+            <SectionHeading
+              eyebrow="Things I've created"
+              title="My Projects"
+              description="Here are some examples of my technical and creative work. Click a project to see its technologies and additional details."
+            />
+
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project, index) => (
+                <article
+                  key={project.title}
+                  className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900 transition duration-300 hover:-translate-y-2 hover:border-accent/40"
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-52 w-full object-cover transition duration-500 hover:scale-105"
+                  />
+
+                  <div className="p-6">
+                    <p className="text-xs font-bold uppercase tracking-widest text-accent">
+                      {project.category}
+                    </p>
+
+                    <h3 className="mt-3 text-xl font-bold text-white">
+                      {project.title}
+                    </h3>
+
+                    <p className="mt-4 leading-7 text-slate-400">
+                      {project.description}
+                    </p>
+
+                    {activeProject === index && (
+                      <div className="mt-5 border-t border-white/10 pt-4">
+                        <p className="mb-3 text-sm font-semibold text-white">
+                          Technologies and skills
+                        </p>
+
+                        <div className="flex flex-wrap gap-2">
+                          {project.technologies.map((technology) => (
+                            <span
+                              key={technology}
+                              className="rounded-lg bg-accent/10 px-3 py-2 text-xs text-violet-200"
+                            >
+                              {technology}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() =>
+                        setActiveProject(
+                          activeProject === index ? null : index
+                        )
+                      }
+                      className="mt-6 flex w-full items-center justify-between border-t border-white/10 pt-4 text-sm font-semibold text-accent transition hover:text-white"
+                    >
+                      {activeProject === index
+                        ? "Hide Details"
+                        : "View Details"}
+
+                      <ArrowUpRight size={18} />
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT */}
+        <section
+          id="contact"
+          className="scroll-mt-20 border-t border-white/5 bg-slate-900/50 px-6 py-24"
+        >
+          <div className="mx-auto max-w-6xl">
+            <SectionHeading
+              eyebrow="Let's connect"
+              title="Contact Me"
+              description="Have a question, an idea, or an opportunity to collaborate? Feel free to reach out."
+            />
+
+            <div className="grid gap-12 md:grid-cols-2">
+              <div>
+                <h3 className="text-2xl font-bold text-white">
+                  Let's create something together.
+                </h3>
+
+                <p className="mt-5 leading-8 text-slate-400">
+                  I'm always interested in learning from others,
+                  exploring new ideas, and collaborating on creative
+                  or technology-related projects.
+                </p>
+
+                <a
+                  href="mailto:your.email@example.com"
+                  className="mt-8 flex items-center gap-4 rounded-xl border border-white/10 bg-dark p-5 transition hover:border-accent/40"
+                >
+                  <Mail className="text-accent" size={24} />
+
+                  <div>
+                    <p className="text-sm text-slate-500">Email address</p>
+                    <p className="mt-1 text-white">
+                      your.email@example.com
+                    </p>
+                  </div>
+                </a>
+
+                <a
+                  href="https://github.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 flex items-center gap-4 rounded-xl border border-white/10 bg-dark p-5 transition hover:border-accent/40"
+                >
+                  <Github className="text-accent" size={24} />
+
+                  <div>
+                    <p className="text-sm text-slate-500">Social link</p>
+                    <p className="mt-1 text-white">GitHub Profile</p>
+                  </div>
+                </a>
+              </div>
+
+              <form
+                onSubmit={handleSubmit}
+                className="rounded-2xl border border-white/10 bg-dark p-6 sm:p-8"
+              >
+                <h3 className="mb-6 text-xl font-bold text-white">
+                  Send a Message
+                </h3>
+
+                <label className="mb-2 block text-sm font-medium">
+                  Your Name
+                </label>
+
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Enter your name"
+                  className="mb-5 w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none transition focus:border-accent"
+                />
+
+                <label className="mb-2 block text-sm font-medium">
+                  Email Address
+                </label>
+
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="you@example.com"
+                  className="mb-5 w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none transition focus:border-accent"
+                />
+
+                <label className="mb-2 block text-sm font-medium">
+                  Message
+                </label>
+
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="Write your message..."
+                  rows="5"
+                  className="mb-5 w-full resize-y rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none transition focus:border-accent"
+                />
+
+                {feedback && (
+                  <p
+                    role="status"
+                    className="mb-4 rounded-lg bg-accent/10 p-3 text-sm text-violet-200"
+                  >
+                    {feedback}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3 font-bold text-dark transition hover:bg-violet-300"
+                >
+                  Send Message <Send size={18} />
+                </button>
+
+                <p className="mt-4 text-xs leading-5 text-slate-500">
+                  Submitting opens your default email application.
+                  Replace the example email address with your own.
+                </p>
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="border-t border-white/10 px-6 py-8 text-center">
+        <p className="text-sm text-slate-500">
+          © {new Date().getFullYear()} Your Name. All rights reserved.
+        </p>
+
+   
